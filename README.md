@@ -33,4 +33,4 @@ udemy NEXT JS로 백엔드 대체하기\_임효선 님의 강의에 포함된 �
 npm run dev
 ```
 
-- localhost:3000 에서 시작합니다.
+- localhost:3000 에서 시작합니다
