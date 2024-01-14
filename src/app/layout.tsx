@@ -12,13 +12,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: {
   children: React.ReactNode;
+  modal: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className={styles.container}>{children}</div>
+        {children}
+        {modal}
       </body>
     </html>
   );
