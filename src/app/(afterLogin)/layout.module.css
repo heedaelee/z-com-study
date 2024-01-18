@@ -8,25 +8,27 @@
   display: flex;
   align-items: flex-end;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .leftSection {
-  background-color: orange;
   width: 275px;
   height: 100dvh;
 }
 
-/* .leftSectionFixed {
+.leftSectionFixed {
   position: fixed;
   width: inherit;
   height: 100dvh;
+  background-color: orange;
   display: flex;
   flex-direction: column;
-} */
-/* 
+}
+
 .leftSectionFixed nav {
   flex: 1;
 }
+
 .leftSectionFixed nav li {
   list-style-type: none;
 }
@@ -45,9 +47,12 @@
   justify-content: center;
   align-items: center;
 }
+
+/*
 .logoPill:hover {
   background-color: rgba(15, 20, 25, 0.1);
 }
+*/
 
 .postButton {
   margin: 16px 0;
@@ -68,29 +73,33 @@
 .postButton:hover {
   background-color: rgb(26, 140, 216);
 }
- */
+
 .rightSectionWrapper {
   display: flex;
   align-items: flex-start;
   height: 100dvh;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .rightSectionInner {
   height: 100%;
   width: 990px;
   display: flex;
+  justify-content: space-between;
   background-color: aqua;
 }
-/* 
+
 .main {
   width: 600px;
+  background-color: aliceblue;
   height: 200dvh;
 }
 
 .rightSection {
   width: 350px;
   height: 100%;
+  background-color: blue;
 }
 
 .search {
@@ -118,7 +127,7 @@
   margin-left: 5px;
   font-size: 15px;
 }
-
+/*
 .followRecommend {
   font-size: 20px;
   font-weight: bold;

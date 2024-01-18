@@ -2,13 +2,19 @@
 
 import style from "@/app/(beforeLogin)/_component/login.module.css";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginModal() {
   const [id, setId] = useState();
   const [password, setPassword] = useState();
   const [message, setMessage] = useState();
   const onSubmit = () => {};
-  const onClickClose = () => {};
+
+  const router = useRouter();
+  const onClickClose = () => {
+    router.back();
+    // TODO: 무언가 해야함?
+  };
 
   const onChangeId = () => {};
 
@@ -18,10 +24,7 @@ export default function LoginModal() {
     <div className={style.modalBackground}>
       <div className={style.modal}>
         <div className={style.modalHeader}>
-          <button
-            className={style.closeButton}
-            onClick={onClickClose}
-          >
+          <button className={style.closeButton} onClick={onClickClose}>
             <svg
               width={24}
               viewBox="0 0 24 24"
@@ -66,10 +69,7 @@ export default function LoginModal() {
           </div>
           <div className={style.message}>{message}</div>
           <div className={style.modalFooter}>
-            <button
-              className={style.actionButton}
-              disabled={!id && !password}
-            >
+            <button className={style.actionButton} disabled={!id && !password}>
               로그인하기
             </button>
           </div>
