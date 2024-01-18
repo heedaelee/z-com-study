@@ -20,7 +20,6 @@
   position: fixed;
   width: inherit;
   height: 100dvh;
-  background-color: orange;
   display: flex;
   flex-direction: column;
 }
@@ -87,19 +86,16 @@
   width: 990px;
   display: flex;
   justify-content: space-between;
-  background-color: aqua;
 }
 
 .main {
   width: 600px;
-  background-color: aliceblue;
   height: 200dvh;
 }
 
 .rightSection {
   width: 350px;
   height: 100%;
-  background-color: blue;
 }
 
 .search {
