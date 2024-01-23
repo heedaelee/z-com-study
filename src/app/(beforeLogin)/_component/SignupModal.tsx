@@ -44,7 +44,6 @@ export default function SignupModal() {
       credentials: "include",
     })
       .then((response: Response) => {
-        console.log(response.status);
         if (response.status === 200) {
           router.replace("/home");
         }

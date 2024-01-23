@@ -7,10 +7,17 @@ import NavMenu from "./_component/NavMenu";
 import LogoutButton from "@/app/(afterLogin)/_component/LogoutButton";
 import TrendSection from "@/app/(afterLogin)/_component/TrendSection";
 import FollowRecommend from "@/app/(afterLogin)/_component/FollowRecommend";
+import RightSearchZone from "./_component/RightSearchZone";
 
-export default function AfterLoginLayout({ children }: { children: ReactNode }) {
+type Props = {
+  children: ReactNode;
+  modal: ReactNode;
+};
+
+export default function AfterLoginLayout({ children, modal }: Props) {
   return (
     <div className={style.container}>
+      {/* 왼쪽 섹션 : 헤더*/}
       <header className={style.leftSectionWrapper}>
         <section className={style.leftSection}>
           <div className={style.leftSectionFixed}>
@@ -21,7 +28,7 @@ export default function AfterLoginLayout({ children }: { children: ReactNode }) 
             </Link>
             <nav>
               <ul>
-                {/* 왼쪽 사이드 메뉴 홈/탐색하기/쪽지/프로필 */}
+                {/* 왼쪽 네비게이션 메뉴 홈/탐색하기/쪽지/프로필 */}
                 <NavMenu />
               </ul>
               <Link href="/compose/tweet" className={style.postButton}>
@@ -32,21 +39,14 @@ export default function AfterLoginLayout({ children }: { children: ReactNode }) 
           </div>
         </section>
       </header>
+
+      {/* 오른쪽 섹션 */}
       <div className={style.rightSectionWrapper}>
         <div className={style.rightSectionInner}>
-          {/* 왼쪽 사이드바 네비에서 url 라우팅 된 페이지(page.tsx)는 아래 children 에서 랜더링 됨 /home, /expore,... */}
+          {/* 라우팅 된 페이지 : 왼쪽 사이드바 네비에서 url 라우팅 된 페이지(page.tsx)는 아래 children 에서 랜더링 됨 ex) /home, /expore,... */}
           <main className={style.main}>{children}</main>
           <section className={style.rightSection}>
-            <div style={{ marginBottom: 60, width: "inherit" }}>
-              <form className={style.search}>
-                <svg width={20} viewBox="0 0 24 24" aria-hidden="true">
-                  <g>
-                    <path d="M10.25 3.75c-3.59 0-6.5 2.91-6.5 6.5s2.91 6.5 6.5 6.5c1.795 0 3.419-.726 4.596-1.904 1.178-1.177 1.904-2.801 1.904-4.596 0-3.59-2.91-6.5-6.5-6.5zm-8.5 6.5c0-4.694 3.806-8.5 8.5-8.5s8.5 3.806 8.5 8.5c0 1.986-.682 3.815-1.824 5.262l4.781 4.781-1.414 1.414-4.781-4.781c-1.447 1.142-3.276 1.824-5.262 1.824-4.694 0-8.5-3.806-8.5-8.5z"></path>
-                  </g>
-                </svg>
-                <input type="search" placeholder="Search" />
-              </form>
-            </div>
+            <RightSearchZone />
             <TrendSection />
             <div className={style.followRecommend}>
               <h3>팔로우 추천</h3>
@@ -57,6 +57,8 @@ export default function AfterLoginLayout({ children }: { children: ReactNode }) 
           </section>
         </div>
       </div>
+      {/* 패러럴 라우터 */}
+      {modal}
     </div>
   );
 }
