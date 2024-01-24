@@ -138,6 +138,7 @@
 .postImageSection.threeImage > div > a {
   flex: 1;
 }
+/* 왼쪽 사진 */
 .postImageSection.threeImage > a:first-child {
   border-top-left-radius: 16px;
   border-bottom-left-radius: 16px;
