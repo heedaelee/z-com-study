@@ -11,10 +11,12 @@ export default function Profile() {
 
   return (
     <main className={style.main}>
+      {/* 상단 헤더 : 백버튼, 타이틀 */}
       <div className={style.header}>
         <BackButton />
         <h3 className={style.headerTitle}>{user.nickname}</h3>
       </div>
+      {/* 유저 정보 */}
       <div className={style.userZone}>
         <div className={style.userImage}>
           <img src={user.image} alt={user.id} />
@@ -25,6 +27,7 @@ export default function Profile() {
         </div>
         <button className={style.followButton}>팔로우</button>
       </div>
+      {/* 포스트 */}
       <div>
         <Post />
         <Post />

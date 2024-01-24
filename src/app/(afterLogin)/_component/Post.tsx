@@ -4,12 +4,18 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
 import ActionButtons from "@/app/(afterLogin)/_component/ActionButtons";
+import { faker } from "@faker-js/faker";
 import PostArticle from "./PostArticle";
+import PostImages from "./PostImages";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
-export default function Post() {
+type Props = {
+  noImage?: boolean;
+};
+
+export default function Post({ noImage }: Props) {
   const target = {
     postId: 1,
     User: {
@@ -19,8 +25,17 @@ export default function Post() {
     },
     content: "클론코딩 라이브로 하니 너무 힘들어요 ㅠㅠ",
     createdAt: new Date(),
-    Images: [],
+    Images: [] as any[],
   };
+
+  if (Math.random() > 0.5 && !noImage) {
+    target.Images.push(
+      { imageId: 1, link: faker.image.urlLoremFlickr() },
+      { imageId: 2, link: faker.image.urlLoremFlickr() },
+      { imageId: 3, link: faker.image.urlLoremFlickr() },
+      { imageId: 4, link: faker.image.urlLoremFlickr() }
+    );
+  }
   return (
     <PostArticle post={target}>
       <div className={style.postWrapper}>
@@ -45,7 +60,9 @@ export default function Post() {
             </span>
           </div>
           <div>{target.content}</div>
-          <div className={style.postImageSection}></div>
+          <div>
+            <PostImages post={target} />
+          </div>
           {/* 액션버튼 3개 좋아요... */}
           <ActionButtons />
         </div>
