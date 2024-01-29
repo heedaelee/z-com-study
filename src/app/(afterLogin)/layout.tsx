@@ -9,6 +9,8 @@ import TrendSection from "@/app/(afterLogin)/_component/TrendSection";
 import FollowRecommend from "@/app/(afterLogin)/_component/FollowRecommend";
 import RightSearchZone from "./_component/RightSearchZone";
 import { auth } from "@/auth";
+import RQProvider from "./_component/RQProvider";
+import FollowRecommendSection from "./_component/FollowRecommendSection";
 
 type Props = {
   children: ReactNode;
@@ -54,25 +56,26 @@ export default async function AfterLoginLayout({ children, modal }: Props) {
         </section>
       </header>
 
-      {/* 오른쪽 섹션 */}
-      <div className={style.rightSectionWrapper}>
-        <div className={style.rightSectionInner}>
-          {/* 라우팅 된 페이지 : 왼쪽 사이드바 네비에서 url 라우팅 된 페이지(page.tsx)는 아래 children 에서 랜더링 됨 ex) /home, /expore,... */}
-          <main className={style.main}>{children}</main>
-          <section className={style.rightSection}>
-            <RightSearchZone />
-            <TrendSection />
-            <div className={style.followRecommend}>
-              <h3>팔로우 추천</h3>
-              <FollowRecommend />
-              <FollowRecommend />
-              <FollowRecommend />
-            </div>
-          </section>
+      {/* 리액트 쿼리 Provider */}
+      <RQProvider>
+        {/* 오른쪽 섹션 */}
+        <div className={style.rightSectionWrapper}>
+          <div className={style.rightSectionInner}>
+            {/* 라우팅 된 페이지 : 왼쪽 사이드바 네비에서 url 라우팅 된 페이지(page.tsx)는 아래 children 에서 랜더링 됨 ex) /home, /expore,... */}
+            <main className={style.main}>{children}</main>
+            <section className={style.rightSection}>
+              <RightSearchZone />
+              <TrendSection />
+              <div className={style.followRecommend}>
+                <h3>팔로우 추천</h3>
+                <FollowRecommendSection />
+              </div>
+            </section>
+          </div>
         </div>
-      </div>
-      {/* 패러럴 라우터 */}
-      {modal}
+        {/* 패러럴 라우터 */}
+        {modal}
+      </RQProvider>
     </div>
   );
 }

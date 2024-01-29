@@ -7,27 +7,20 @@ import ActionButtons from "@/app/(afterLogin)/_component/ActionButtons";
 import { faker } from "@faker-js/faker";
 import PostArticle from "./PostArticle";
 import PostImages from "./PostImages";
+import { Post } from "@/model/Post";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
 type Props = {
   noImage?: boolean;
+  post: Post;
 };
 
-export default function Post({ noImage }: Props) {
-  const target = {
-    postId: 1,
-    User: {
-      id: "elonmusk",
-      nickname: "Elon Musk",
-      image: "/yRsRRjGO.jpg",
-    },
-    content: "클론코딩 라이브로 하니 너무 힘들어요 ㅠㅠ",
-    createdAt: new Date(),
-    Images: [] as any[],
-  };
+export default function Post({ noImage, post }: Props) {
+  const target = post;
 
+  console.log(target);
   /*  사진은 50% 확률로 생길 수 있고, 사진이 생긴다면 갯수는 #33 행의 Math.random() * 4는 0.0004..~ 3.6666..이고 이걸 내림하면 0~3인데, 거기서 +1, 1~4 까지 
     numImages는 1~4 사이의 정수가 된다. for문에 제한 조건이 동적으로 들어가고, for문은 1번에서 4번까지 돌아가서 같은 확률로 1~4개의 이미지가 생길 수 있다.
   */
