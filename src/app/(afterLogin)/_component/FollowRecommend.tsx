@@ -1,15 +1,22 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import style from "./followRecommend.module.css";
+import { useRouter } from "next/navigation";
 
 export default function FollowRecommend() {
+  const { data } = useSession();
+  const router = useRouter();
+
   const user = {
     id: "elonmusk",
     nickname: "Elon Musk",
     image: "/yRsRRjGO.jpg",
   };
 
-  const onFollow = () => {};
+  const onFollow = () => {
+    if (!data?.user) router.replace(`/login`);
+  };
 
   return (
     <div className={style.container}>
