@@ -1,10 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import style from "./modal.module.css";
 import { useRef, useState } from "react";
 export default function TweetModal() {
   const [content, setContent] = useState();
   const imageRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
   const onSubmit = () => {};
   const onClickClose = () => {};
   const onClickButton = () => {};
