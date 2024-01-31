@@ -34,27 +34,25 @@
   align-items: center;
   margin-right: 12px;
   border-radius: 50%;
+  width: 134px;
+  height: 134px;
+  border: 1px solid lightgray;
 }
-
 .userImage img {
   width: 134px;
   border-radius: 50%;
 }
-
 .userName {
   margin: 0 12px;
   flex: 1;
 }
-
 .userName > div:first-child {
   font-weight: bold;
   font-size: 20px;
 }
-
 .userName > div:last-child {
   font-size: 15px;
 }
-
 .followButton {
   border: 1px solid rgb(207, 217, 222);
   padding: 0 16px;
@@ -68,7 +66,6 @@
   color: white;
   cursor: pointer;
 }
-
 .followButton:hover {
   background-color: rgb(39, 44, 48);
 }

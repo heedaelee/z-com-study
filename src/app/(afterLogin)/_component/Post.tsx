@@ -4,7 +4,6 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
 import ActionButtons from "@/app/(afterLogin)/_component/ActionButtons";
-import { faker } from "@faker-js/faker";
 import PostArticle from "./PostArticle";
 import PostImages from "./PostImages";
 import { Post } from "@/model/Post";
@@ -20,19 +19,6 @@ type Props = {
 export default function Post({ noImage, post }: Props) {
   const target = post;
 
-  console.log(target);
-  /*  사진은 50% 확률로 생길 수 있고, 사진이 생긴다면 갯수는 #33 행의 Math.random() * 4는 0.0004..~ 3.6666..이고 이걸 내림하면 0~3인데, 거기서 +1, 1~4 까지 
-    numImages는 1~4 사이의 정수가 된다. for문에 제한 조건이 동적으로 들어가고, for문은 1번에서 4번까지 돌아가서 같은 확률로 1~4개의 이미지가 생길 수 있다.
-  */
-  if (Math.random() > 0.5 && !noImage) {
-    const numImages = Math.floor(Math.random() * 4) + 1;
-    for (let i = 0; i < numImages; i++) {
-      target.Images.push({
-        imageId: i + 1,
-        link: faker.image.urlLoremFlickr(),
-      });
-    }
-  }
   return (
     <PostArticle post={target}>
       <div className={style.postWrapper}>
@@ -57,6 +43,11 @@ export default function Post({ noImage, post }: Props) {
             </span>
           </div>
           <div>{target.content}</div>
+          {!noImage && (
+            <div>
+              <PostImages post={target} />
+            </div>
+          )}
           <div>
             <PostImages post={target} />
           </div>
