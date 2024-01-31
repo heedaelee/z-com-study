@@ -23,6 +23,7 @@ export default function Room() {
   };
 
   const onClick = () => {
+    // at(-1)은 배열의 마지막 요소를 가져온다.
     router.push(`/messages/${user.Messages.at(-1)?.roomId}`);
   };
 

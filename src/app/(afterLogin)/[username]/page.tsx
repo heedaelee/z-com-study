@@ -1,41 +1,37 @@
 import style from "./profile.module.css";
-import Post from "@/app/(afterLogin)/_component/Post";
-import BackButton from "@/app/(afterLogin)/_component/BackButton";
 
-export default function Profile() {
-  const user = {
-    id: "zerohch0",
-    nickname: "제로초",
-    image: "/5Udwvqim.jpg",
-  };
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+import UserPosts from "./_component/UserPosts";
+import { getUserPosts } from "./_lib/getUserPosts";
+import { getUser } from "./_lib/getUser";
+import UserInfo from "@/app/(afterLogin)/[username]/_component/UserInfo";
+
+type Props = { params: { username: string } };
+
+export default async function Profile({ params }: Props) {
+  const { username } = params;
+  const queryClient = new QueryClient();
+  /* 사용자 정보 가져오기 */
+  await queryClient.prefetchQuery({ queryKey: ["users", username], queryFn: getUser });
+
+  /* 해당 유저의 포스트글 */
+  await queryClient.prefetchQuery({
+    queryKey: ["posts", "users", username],
+    queryFn: getUserPosts,
+  });
+
+  const dehydratedState = dehydrate(queryClient);
 
   return (
     <main className={style.main}>
-      {/* 상단 헤더 : 백버튼, 타이틀 */}
-      <div className={style.header}>
-        <BackButton />
-        <h3 className={style.headerTitle}>{user.nickname}</h3>
-      </div>
-      {/* 유저 정보 */}
-      <div className={style.userZone}>
-        <div className={style.userImage}>
-          <img src={user.image} alt={user.id} />
+      <HydrationBoundary state={dehydratedState}>
+        <UserInfo username={username} />
+
+        {/* 포스트 */}
+        <div>
+          <UserPosts username={username} />
         </div>
-        <div className={style.userName}>
-          <div>{user.nickname}</div>
-          <div>@{user.id}</div>
-        </div>
-        <button className={style.followButton}>팔로우</button>
-      </div>
-      {/* 포스트 */}
-      <div>
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-      </div>
+      </HydrationBoundary>
     </main>
   );
 }
