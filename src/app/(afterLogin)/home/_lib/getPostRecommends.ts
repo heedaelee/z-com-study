@@ -1,7 +1,7 @@
 type Props = { pageParam?: number };
 export async function getPostRecommends({ pageParam }: Props) {
   const res = await fetch(
-    `http://localhost:9090/api/postRecommends?cursor=${pageParam}`, //0, 5, 10 이런식으로 1페이지, 2페이지.. 이렇게 호출
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/recommends?cursor=${pageParam}`, //0, 5, 10 이런식으로 1페이지, 2페이지.. 이렇게 호출
     {
       next: {
         tags: ["posts", "recommends"],

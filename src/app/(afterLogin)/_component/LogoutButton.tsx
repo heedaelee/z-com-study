@@ -3,10 +3,32 @@
 import style from "./logoutButton.module.css";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Session } from "@auth/core/types";
 
-export default function LogoutButton() {
+type Props = {
+  me: Session | null;
+};
+export default function LogoutButton({ me }: Props) {
   const router = useRouter();
-  const { data: me } = useSession();
+
+  // const queryClient = useQueryClient();
+
+  // const onLogout = () => {
+  //   queryClient.invalidateQueries({
+  //     queryKey: ["posts"],
+  //   });
+  //   queryClient.invalidateQueries({
+  //     queryKey: ["users"],
+  //   });
+  //   signOut({ redirect: false })
+  //     .then(() => {
+  //       fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/logout`, {
+  //         method: 'post',
+  //         credentials: 'include',
+  //       });
+  //       router.replace('/');
+  //     });
+  // };
 
   const onLogout = () => {
     signOut({ redirect: false }).then(() => {

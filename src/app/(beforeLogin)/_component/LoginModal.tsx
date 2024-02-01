@@ -16,12 +16,18 @@ export default function LoginModal() {
     e.preventDefault();
     setMessage("");
     try {
-      await signIn("credentials", {
+      const response = await signIn("credentials", {
         username: id,
         password,
         redirect: false,
       });
-      router.replace("/home");
+      /* 강의대로 안되서 일단 ok가 아닌 error로 커스텀 설정 적용 해둠
+       */
+      if (response?.error === "CredentialsSignin") {
+        setMessage("아이디와 비밀번호가 일치하지 않습니다.");
+      } else {
+        router.replace("/home");
+      }
     } catch (err) {
       console.error(err);
       setMessage("아이디와 비밀번호가 일치하지 않습니다.");

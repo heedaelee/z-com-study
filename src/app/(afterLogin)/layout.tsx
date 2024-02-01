@@ -18,6 +18,7 @@ type Props = {
 };
 /* 서버컴포넌트는 비동기 컴포넌트로 변경 가능 */
 export default async function AfterLoginLayout({ children, modal }: Props) {
+  /* 로그인 후 세션 받아오는 코드 */
   const session = await auth();
 
   return (
@@ -51,7 +52,7 @@ export default async function AfterLoginLayout({ children, modal }: Props) {
                 </Link>
               </nav>
             )}
-            <LogoutButton />
+            <LogoutButton me={session} />
           </div>
         </section>
       </header>

@@ -1,14 +1,9 @@
-/* eslint-disable import/no-anonymous-default-export */
 "use server";
-import { signIn } from "@/auth";
-/* use server 사용시 서버코드를 아래에 적을 수 있다, 브라우저에 노출이 되지 않음*/
 
 import { redirect } from "next/navigation";
+import { signIn } from "@/auth";
 
-export default async (
-  prevState: { message: string | null | undefined },
-  formData: FormData
-) => {
+export default async (prevState: any, formData: FormData) => {
   /* FormData는 input 태그의 name을 통해 value를 받아올 수 있음 */
   if (!formData.get("id") || !(formData.get("id") as string)?.trim()) {
     return { message: "no_id" };
@@ -23,31 +18,33 @@ export default async (
     return { message: "no_image" };
   }
 
+  formData.set("nickname", formData.get("name") as string);
+
   let shouldRedirect = false;
-  await signIn("credentials", {
-    username: formData.get("id"),
-    password: formData.get("password"),
-    redirect: false,
-  });
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users`, {
       method: "post",
       body: formData,
+      // 넣어 줘야 쿠키가 전달됨  (로그인 상태 유지)
       credentials: "include",
     });
     console.log(response.status);
-
     if (response.status === 403) {
-      alert("이미 존재하는 아이디입니다.");
       return { message: "user_exists" };
     }
-
     console.log(await response.json());
     shouldRedirect = true;
-  } catch (e) {
-    console.error(e);
-    alert("회원가입에 실패했습니다.");
+    await signIn("credentials", {
+      username: formData.get("id"),
+      password: formData.get("password"),
+      redirect: false,
+    });
+  } catch (err) {
+    console.error(err);
+    return;
   }
 
-  if (shouldRedirect) redirect("/home"); // try catch문 안에서 X
+  if (shouldRedirect) {
+    redirect("/home"); // try/catch문 안에서 X
+  }
 };
