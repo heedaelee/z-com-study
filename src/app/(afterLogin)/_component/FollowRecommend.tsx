@@ -4,18 +4,88 @@ import { useSession } from "next-auth/react";
 import style from "./followRecommend.module.css";
 import { useRouter } from "next/navigation";
 import { User } from "@/model/User";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { MouseEventHandler } from "react";
 
 type Props = {
   user: User;
 };
 
 export default function FollowRecommend({ user }: Props) {
-  const { data: session } = useSession();
   const router = useRouter();
+  const { data: session } = useSession();
+  const followed = !!user.Followers?.find((v) => v.id === session?.user?.email);
+  const queryClient = useQueryClient();
 
-  const onFollow = () => {
+  const follow = useMutation({
+    mutationFn: (userId: string) => {
+      console.log("follow", userId);
+      return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${userId}/follow`, {
+        credentials: "include",
+        method: "post",
+      });
+    },
+    onMutate(userId: string) {
+      const value: User[] | undefined = queryClient.getQueryData([
+        "users",
+        "followRecommends",
+      ]); // 팔로워 id들
+      if (value) {
+        const index = value.findIndex((v) => v.id === userId);
+        console.log(value, userId, index);
+        const shallow = [...value];
+        shallow[index] = {
+          ...shallow[index],
+          Followers: [{ id: session?.user?.email as string }],
+          _count: {
+            ...shallow[index]._count,
+            Followers: shallow[index]._count?.Followers + 1,
+          },
+        };
+        queryClient.setQueryData(["users", "followRecommends"], shallow);
+      }
+      const value2: User | undefined = queryClient.getQueryData(["users", userId]); // 추천 팔로우들
+      if (value2) {
+        const shallow = {
+          ...value2,
+          Followers: [{ id: session?.user?.email as string }],
+          _count: {
+            ...value2._count,
+            Followers: value2._count?.Followers + 1,
+          },
+        };
+        queryClient.setQueryData(["users", userId], shallow);
+      }
+    },
+
+    onError() {},
+  });
+
+  const unfollow = useMutation({
+    mutationFn: (userId: string) => {
+      console.log("unfollow", userId);
+      return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${userId}/unfollow`, {
+        credentials: "include",
+        method: "post",
+      });
+    },
+    onMutate() {},
+    onError() {},
+  });
+
+  const onFollow: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    console.log("follow", followed, user.id);
     /* 과제였음 */
     if (!session?.user) router.replace(`/login`);
+
+    if (followed) {
+      /* 여기서 파리미터를 넣어서, useMutation(mutationFn) 의 mutationFn에서 파라미터로 사용가능하게한다.*/
+      unfollow.mutate(user.id);
+    } else {
+      follow.mutate(user.id);
+    }
   };
 
   return (
