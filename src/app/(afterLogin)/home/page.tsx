@@ -35,7 +35,6 @@ export default async function Home() {
           <Suspense fallback={<Loading />}>
             <TabDeciderSuspense />
           </Suspense>
-          <PostRecommends />
         </TabProvider>
       </HydrationBoundary>
     </main>

@@ -9,8 +9,6 @@ export default function NavMenu() {
   const segment = useSelectedLayoutSegment();
   const { data: me } = useSession();
 
-  console.log(segment);
-
   return (
     <>
       <li>
