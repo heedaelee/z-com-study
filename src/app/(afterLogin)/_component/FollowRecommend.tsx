@@ -1,11 +1,13 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import style from "./followRecommend.module.css";
-import { useRouter } from "next/navigation";
 import { User } from "@/model/User";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import cx from "classnames";
+import Link from "next/link";
 import { MouseEventHandler } from "react";
+import { useRouter } from "next/navigation";
 
 type Props = {
   user: User;
@@ -29,7 +31,7 @@ export default function FollowRecommend({ user }: Props) {
       const value: User[] | undefined = queryClient.getQueryData([
         "users",
         "followRecommends",
-      ]); // 팔로워 id들
+      ]);
       if (value) {
         const index = value.findIndex((v) => v.id === userId);
         console.log(value, userId, index);
@@ -44,7 +46,7 @@ export default function FollowRecommend({ user }: Props) {
         };
         queryClient.setQueryData(["users", "followRecommends"], shallow);
       }
-      const value2: User | undefined = queryClient.getQueryData(["users", userId]); // 추천 팔로우들
+      const value2: User | undefined = queryClient.getQueryData(["users", userId]);
       if (value2) {
         const shallow = {
           ...value2,
@@ -57,20 +59,116 @@ export default function FollowRecommend({ user }: Props) {
         queryClient.setQueryData(["users", userId], shallow);
       }
     },
-
-    onError() {},
+    onError(error, userId: string) {
+      const value: User[] | undefined = queryClient.getQueryData([
+        "users",
+        "followRecommends",
+      ]);
+      if (value) {
+        const index = value.findIndex((v) => v.id === userId);
+        console.log(value, userId, index);
+        const shallow = [...value];
+        shallow[index] = {
+          ...shallow[index],
+          Followers: shallow[index].Followers.filter(
+            (v) => v.id !== session?.user?.email
+          ),
+          _count: {
+            ...shallow[index]._count,
+            Followers: shallow[index]._count?.Followers - 1,
+          },
+        };
+        queryClient.setQueryData(["users", "followRecommends"], shallow);
+        const value2: User | undefined = queryClient.getQueryData(["users", userId]);
+        if (value2) {
+          const shallow = {
+            ...value2,
+            Followers: value2.Followers.filter((v) => v.id !== session?.user?.email),
+            _count: {
+              ...value2._count,
+              Followers: value2._count?.Followers - 1,
+            },
+          };
+          queryClient.setQueryData(["users", userId], shallow);
+        }
+      }
+    },
   });
 
   const unfollow = useMutation({
     mutationFn: (userId: string) => {
       console.log("unfollow", userId);
-      return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${userId}/unfollow`, {
+      return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${userId}/follow`, {
         credentials: "include",
-        method: "post",
+        method: "delete",
       });
     },
-    onMutate() {},
-    onError() {},
+    onMutate(userId: string) {
+      const value: User[] | undefined = queryClient.getQueryData([
+        "users",
+        "followRecommends",
+      ]);
+      if (value) {
+        const index = value.findIndex((v) => v.id === userId);
+        console.log(value, userId, index);
+        const shallow = [...value];
+        shallow[index] = {
+          ...shallow[index],
+          Followers: shallow[index].Followers.filter(
+            (v) => v.id !== session?.user?.email
+          ),
+          _count: {
+            ...shallow[index]._count,
+            Followers: shallow[index]._count?.Followers - 1,
+          },
+        };
+        queryClient.setQueryData(["users", "followRecommends"], shallow);
+        const value2: User | undefined = queryClient.getQueryData(["users", userId]);
+        if (value2) {
+          const shallow = {
+            ...value2,
+            Followers: value2.Followers.filter((v) => v.id !== session?.user?.email),
+            _count: {
+              ...value2._count,
+              Followers: value2._count?.Followers - 1,
+            },
+          };
+          queryClient.setQueryData(["users", userId], shallow);
+        }
+      }
+    },
+    onError(error, userId: string) {
+      const value: User[] | undefined = queryClient.getQueryData([
+        "users",
+        "followRecommends",
+      ]);
+      if (value) {
+        const index = value.findIndex((v) => v.id === userId);
+        console.log(value, userId, index);
+        const shallow = [...value];
+        shallow[index] = {
+          ...shallow[index],
+          Followers: [{ id: session?.user?.email as string }],
+          _count: {
+            ...shallow[index]._count,
+            Followers: shallow[index]._count?.Followers + 1,
+          },
+        };
+        queryClient.setQueryData(["users", "followRecommends"], shallow);
+      }
+      const value2: User | undefined = queryClient.getQueryData(["users", userId]);
+      if (value2) {
+        const shallow = {
+          ...value2,
+          Followers: [{ id: session?.user?.email as string }],
+          _count: {
+            ...value2._count,
+            Followers: value2._count?.Followers + 1,
+          },
+        };
+        queryClient.setQueryData(["users", userId], shallow);
+      }
+    },
   });
 
   const onFollow: MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -89,7 +187,7 @@ export default function FollowRecommend({ user }: Props) {
   };
 
   return (
-    <div className={style.container}>
+    <Link href={`/${user.id}`} className={style.container}>
       <div className={style.userLogoSection}>
         <div className={style.userLogo}>
           <img src={user.image} alt={user.id} />
@@ -99,9 +197,9 @@ export default function FollowRecommend({ user }: Props) {
         <div className={style.title}>{user.nickname}</div>
         <div className={style.count}>@{user.id}</div>
       </div>
-      <div className={style.followButtonSection}>
-        <button onClick={onFollow}>팔로우</button>
+      <div className={cx(style.followButtonSection, followed && style.followed)}>
+        <button onClick={onFollow}>{followed ? "팔로잉" : "팔로우"}</button>
       </div>
-    </div>
+    </Link>
   );
 }

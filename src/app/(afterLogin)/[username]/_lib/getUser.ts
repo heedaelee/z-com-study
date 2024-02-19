@@ -10,6 +10,7 @@ export const getUser: QueryFunction<User, [_1: string, _2: string]> = async ({
       tags: ["users", username],
     },
     cache: "no-store",
+    credentials: "include",
   });
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
