@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Post } from "@/modal/Post";
+import { Post } from "@/model/Post";
 
 interface ModalState {
   mode: "new" | "comment";
