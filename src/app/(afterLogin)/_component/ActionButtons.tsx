@@ -111,6 +111,7 @@ export default function ActionButtons({ white, post }: Props) {
                   Hearts: shallow.pages[pageIndex][index]._count.Hearts - 1,
                 },
               };
+              queryClient.setQueryData(queryKey, shallow);
             }
           } else if (value) {
             // 싱글 포스트인 경우
@@ -175,6 +176,7 @@ export default function ActionButtons({ white, post }: Props) {
                   Hearts: shallow.pages[pageIndex][index]._count.Hearts - 1,
                 },
               };
+              queryClient.setQueryData(queryKey, shallow);
             }
           } else if (value) {
             // 싱글 포스트인 경우
@@ -223,6 +225,7 @@ export default function ActionButtons({ white, post }: Props) {
                   Hearts: shallow.pages[pageIndex][index]._count.Hearts + 1,
                 },
               };
+              queryClient.setQueryData(queryKey, shallow);
             }
           } else if (value) {
             // 싱글 포스트인 경우
@@ -409,13 +412,7 @@ export default function ActionButtons({ white, post }: Props) {
     <div className={style.actionButtons}>
       {/* 1. 코맨트 버튼 */}
       {/* Dynamic property : commented가 true일 때, [style.commented]가 적용됨 */}
-      <div
-        className={cx(
-          style.commentButton,
-          { [style.commented]: commented },
-          white && style.white
-        )}
-      >
+      <div className={cx(style.commentButton, white && style.white)}>
         <button onClick={onClickComment}>
           <svg width={24} viewBox="0 0 24 24" aria-hidden="true">
             <g>
@@ -423,7 +420,7 @@ export default function ActionButtons({ white, post }: Props) {
             </g>
           </svg>
         </button>
-        <div className={style.count}>{post._count.Comments || ""}</div>
+        <div className={style.count}>{post._count?.Comments || ""}</div>
       </div>
       {/* 2. 리포스트 버튼 */}
       <div
@@ -454,7 +451,7 @@ export default function ActionButtons({ white, post }: Props) {
             </g>
           </svg>
         </button>
-        <div className={style.count}>{post._count.Hearts || ""}</div>
+        <div className={style.count}>{post._count?.Hearts || ""}</div>
       </div>
     </div>
   );
